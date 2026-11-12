@@ -1,0 +1,7 @@
+# Server-side; raw AW port stays loopback-only. Put HTTPS in front (see docs).
+bindPort = 7000
+proxyBindAddr = "127.0.0.1"
+auth.method = "token"
+auth.token = "REPLACE_WITH_FRP_SHARED_SECRET"
+transport.tls.force = true
+allowPorts = [{ single = 7075 }]

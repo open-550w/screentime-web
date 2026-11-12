@@ -1,0 +1,15 @@
+# Phone-side frpc; modern TOML syntax (frp >= 0.52).
+serverAddr = "YOUR_SERVER_IP_OR_DOMAIN"
+serverPort = 7000
+loginFailExit = false
+
+auth.method = "token"
+auth.token = "REPLACE_WITH_FRP_SHARED_SECRET"
+transport.tls.enable = true
+
+[[proxies]]
+name = "aw-my-android"
+type = "tcp"
+localIP = "127.0.0.1"
+localPort = 5600
+remotePort = 7075

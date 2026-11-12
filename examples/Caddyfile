@@ -1,0 +1,4 @@
+# Point your domain at the server before starting Caddy.
+aw.example.com {
+    reverse_proxy 127.0.0.1:7075
+}

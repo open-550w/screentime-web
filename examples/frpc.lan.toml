@@ -1,0 +1,14 @@
+# On the phone, replace serverAddr with your computer's LAN IP, NOT 127.0.0.1.
+serverAddr = "192.168.1.10"
+serverPort = 7000
+loginFailExit = false
+auth.method = "token"
+auth.token = "REPLACE_WITH_LAN_SHARED_SECRET"
+transport.tls.enable = true
+
+[[proxies]]
+name = "aw-lan-phone"
+type = "tcp"
+localIP = "127.0.0.1"
+localPort = 5600
+remotePort = 5601

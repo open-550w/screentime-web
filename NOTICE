@@ -1,0 +1,9 @@
+The optional Apple collector in vendor/apple-archiver is from
+https://github.com/tobias-x/screentime-archive
+Copyright (c) 2026 Tobias Franks, licensed under MIT.
+Its license is retained in vendor/apple-archiver/LICENSE.
+
+ActivityWatch and frp are separate external projects, not bundled in this release.
+This project integrates with ActivityWatch's HTTP API and includes original,
+placeholder-only frp configuration examples. Their licenses and trademarks remain
+with their respective projects.
