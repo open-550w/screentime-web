@@ -15,7 +15,7 @@ class SyncManager:
         self.store=store
         self.config=ConfigStore(store.state,store.archive)
         self.path=store.state/'sync-status.json'
-        try:self.status=json.loads(self.path.read_text())
+        try:self.status=json.loads(self.path.read_text(encoding='utf-8'))
         except (OSError,ValueError):self.status={}
         for row in self.status.values():row['running']=False
         self.lock=threading.RLock();self.stop_event=threading.Event();self.thread=None

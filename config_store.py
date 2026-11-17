@@ -21,7 +21,7 @@ def atomic_json(path, data):
     temp=path.with_name(path.name+'.'+secrets.token_hex(5)+'.tmp')
     fd=os.open(temp,os.O_WRONLY|os.O_CREAT|os.O_EXCL,0o600)
     try:
-        with os.fdopen(fd,'w') as f:
+        with os.fdopen(fd,'w',encoding='utf-8') as f:
             json.dump(data,f,ensure_ascii=False,indent=2)
             f.write('\n');f.flush();os.fsync(f.fileno())
         os.replace(temp,path)
@@ -83,7 +83,7 @@ class ConfigStore:
                                 'schedule_mode':'independent','schedule':dict(DEFAULT_POLICY,mode='daily',times=['12:30'],run_on_start=True)})
             legacy=self.state/'android-source.json'
             if legacy.exists():
-                old=json.loads(legacy.read_text())
+                old=json.loads(legacy.read_text(encoding='utf-8'))
                 hostname='';name='Android'
                 dbfile=self.state/'android.sqlite'
                 if dbfile.exists():
@@ -99,7 +99,7 @@ class ConfigStore:
 
     def load(self):
         with self.lock:
-            return json.loads(self.path.read_text())
+            return json.loads(self.path.read_text(encoding='utf-8'))
 
     def public(self):
         config=self.load()

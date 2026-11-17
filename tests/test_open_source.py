@@ -74,6 +74,20 @@ class OpenSourceTests(unittest.TestCase):
         with self.assertRaises(ValueError):config.save_source({'name':'x','url':'file:///tmp/data'})
         with self.assertRaises(ValueError):validate_policy(dict(DEFAULT_POLICY,mode='daily',times=['25:00']))
 
+    def test_unicode_config_status_and_snapshot_roundtrip(self):
+        name='手机与电脑 📱'
+        config=self.store.manager.config
+        ident=config.save_source({'name':name,'url':'http://127.0.0.1:5600'})
+        self.assertEqual(ConfigStore(self.state,self.archive).source(ident)['name'],name)
+        atomic_json(self.store.manager.path,{ident:{'error':name}})
+        self.assertEqual(SyncManager(self.store).status[ident]['error'],name)
+        self.store.save('app',{'bundle':'android:example.a','name':name,'category':'work'})
+        export=Exporter(self.store,'test-secret')
+        first=export.export(dict(self.query,limit='1'))
+        second=export.export({'cursor':first['next_cursor'],'limit':'1'})
+        self.assertEqual(first['records'][0]['name'],name)
+        self.assertEqual(second['records'][0]['name'],name)
+
     def test_scheduler_fixed_times_combination_and_disable(self):
         now=stamp('2026-01-01T11:00:00+08:00')
         daily=dict(DEFAULT_POLICY,mode='daily',times=['12:30'])

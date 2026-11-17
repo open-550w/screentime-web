@@ -1,3 +1,4 @@
+from contextlib import closing
 import os
 import concurrent.futures
 import http.client
@@ -19,7 +20,7 @@ class ExplorerTests(unittest.TestCase):
         self.temp=tempfile.TemporaryDirectory()
         self.root=Path(self.temp.name)
         self.archive=self.root/'archive.sqlite'
-        with sqlite3.connect(self.archive) as db:
+        with closing(sqlite3.connect(self.archive)) as db, db:
             db.executescript('''CREATE TABLE devices(device_id TEXT PRIMARY KEY,name TEXT,platform TEXT,os_build TEXT,source TEXT,first_seen REAL,last_seen REAL);
             CREATE TABLE sessions(device_id TEXT,bundle_id TEXT,start_ts REAL,end_ts REAL,PRIMARY KEY(device_id,bundle_id,start_ts));
             CREATE TABLE runs(run_at REAL,device_id TEXT,source TEXT,sessions_seen INTEGER,sessions_new INTEGER,status TEXT,message TEXT);''')

@@ -1,3 +1,4 @@
+from contextlib import closing
 import json
 from pathlib import Path
 import sqlite3
@@ -15,7 +16,7 @@ class AndroidSyncTests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         self.root = Path(self.temp.name)
         self.apple = self.root / 'apple.sqlite'
-        with sqlite3.connect(self.apple) as db:
+        with closing(sqlite3.connect(self.apple)) as db, db:
             db.executescript(SCHEMA)
             db.execute("INSERT INTO devices VALUES ('iphone','iPhone','ios','','biome',0,0)")
             db.execute("INSERT INTO sessions VALUES ('iphone','com.tencent.xin',1794254400,1794254460)")

@@ -45,7 +45,7 @@ class Exporter:
             if query.get('cursor'):
                 ident,offset=self.read_cursor(query['cursor'])
                 path=self.directory/(ident+'.json')
-                try:snapshot=json.loads(path.read_text())
+                try:snapshot=json.loads(path.read_text(encoding='utf-8'))
                 except (OSError,ValueError):raise ValueError('快照不存在或已过期，请重新导出') from None
                 if time.time()-snapshot['created_at']>self.TTL:
                     path.unlink(missing_ok=True)

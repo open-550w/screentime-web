@@ -185,7 +185,7 @@ class Store:
 
     def android_status(self):
         try:
-            return json.loads((self.state / 'android-sync-status.json').read_text())
+            return json.loads((self.state / 'android-sync-status.json').read_text(encoding='utf-8'))
         except (OSError, ValueError):
             return None
 
@@ -393,7 +393,7 @@ class Handler(BaseHTTPRequestHandler):
         if url.path=='/login' or (url.path=='/' and not self.authorized()):
             route=self.route_location()
             action='/login'+(route[1:] if '?' in route else '')
-            page=(ROOT/'static/login.html').read_text().replace('action="/login"','action="'+html.escape(action,quote=True)+'"')
+            page=(ROOT/'static/login.html').read_text(encoding='utf-8').replace('action="/login"','action="'+html.escape(action,quote=True)+'"')
             return self.response(200,page.encode(),'text/html; charset=utf-8')
         if not self.authorized():
             return self.response(401,{'error':'请先输入访问 Token'})
@@ -495,9 +495,9 @@ def ensure_token(state):
     token_path=state/'access-token'
     if not token_path.exists():
         fd=os.open(token_path,os.O_WRONLY|os.O_CREAT|os.O_EXCL,0o600)
-        with os.fdopen(fd,'w') as f:
+        with os.fdopen(fd,'w',encoding='utf-8') as f:
             f.write(secrets.token_urlsafe(32)+'\n')
-    token=token_path.read_text().strip()
+    token=token_path.read_text(encoding='utf-8').strip()
     if len(token)<32:
         raise ValueError('访问 Token 长度不足')
     return token
